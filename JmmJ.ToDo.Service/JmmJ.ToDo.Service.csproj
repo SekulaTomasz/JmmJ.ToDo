@@ -4,4 +4,13 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Repository\" />
+    <Folder Include="Service\IService\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\JmmJ.ToDo.Core\JmmJ.ToDo.Core.csproj" />
+  </ItemGroup>
+
 </Project>
