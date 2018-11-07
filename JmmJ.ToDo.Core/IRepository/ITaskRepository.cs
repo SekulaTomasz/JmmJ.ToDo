@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace JmmJ.ToDo.Core.IRepository
 {
-	public interface ITaskRepository
+	public interface ITaskRepository : IRepository
 	{
-		Task<Task> GetTaskById(int id);
-		Task<IEnumerable<Task>> GetTasksByTitle(string title);
-		Task<IEnumerable<Task>> GetTasks(int start, int count);
+		Task<Task> GetTaskById(Guid id);
+		Task<IList<Task>> GetTasksByTitle(string title);
+		Task<IList<Task>> GetTasks(int start, int count);
+		Task<IList<Task>> GetTasksByDescription(string description);
 		Task<Task> Put(Task task);
 		Task<Task> Post(Task task);
-		Task Delete(int id);
+		Task Delete(Guid id);
 	}
 }

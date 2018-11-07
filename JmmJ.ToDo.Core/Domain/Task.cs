@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using JmmJ.ToDo.Core.Enum;
 
 
@@ -14,7 +12,7 @@ namespace JmmJ.ToDo.Core.Domain
 		public DateTime ExpectedEndDate { get; protected set; }
 		public Status Status { get; protected set; }
 		public Priority Priority { get; protected set; }
-
+		public DateTime CreatedAt { get; protected set; }
 
 
 		public static Task Create(string title, string description, DateTime expectedEndDate, Status status, Priority priority) 
@@ -29,20 +27,34 @@ namespace JmmJ.ToDo.Core.Domain
 			SetExpectedEndDate(expectedEndDate);
 			SetStatus(status);
 			SetPriority(priority);
+			CreatedAt = DateTime.Now;
 		}
 
 		private void SetTitle(string title)
 		{
+			
+			if (string.IsNullOrEmpty(title))
+			{
+				throw new Exception("Title cannot be empty");
+			}
 			Title = title;
 		}
 
 		private void SetDescription(string description)
 		{
+			if (string.IsNullOrEmpty(description))
+			{
+				throw new Exception("Description cannot be empty");
+			}
 			Description = description;
 		}
 
 		private void SetExpectedEndDate(DateTime endDate)
 		{
+			if (endDate.Millisecond < DateTime.Now.Millisecond)
+			{
+				throw new Exception("Expected date cannot by lower than current date");
+			}
 			ExpectedEndDate = endDate;
 		}
 
@@ -55,7 +67,6 @@ namespace JmmJ.ToDo.Core.Domain
 		{
 			Priority = priority;
 		}
-
 
 	}
 }
