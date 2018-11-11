@@ -7,6 +7,7 @@ namespace JmmJ.ToDo.Service.IoC
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
+			builder.RegisterInstance(Mapper.AutoMapper.Initialize()).SingleInstance();
 			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<ServiceModule>();
 
