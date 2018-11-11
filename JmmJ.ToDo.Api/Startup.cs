@@ -64,13 +64,13 @@ namespace JmmJ.ToDo.Api
 			if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
-				app.UseSwagger();
-				app.UseSwaggerUI(c =>
-				{
-					c.SwaggerEndpoint("/swagger/v1/swagger.json", "ToDo API V1");
-				});
+				
 			}
-
+			app.UseSwagger();
+			app.UseSwaggerUI(c =>
+			{
+				c.SwaggerEndpoint("/swagger/v1/swagger.json", "ToDo API V1");
+			});
 			app.UseExceptionHandler(builder =>
 			{
 				builder.Run(async context =>

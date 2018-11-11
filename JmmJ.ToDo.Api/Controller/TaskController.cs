@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using JmmJ.ToDo.Core.Enum;
 using JmmJ.ToDo.Service.Dto;
 using JmmJ.ToDo.Service.Service.IService;
 using Microsoft.AspNetCore.Http;
@@ -23,24 +24,32 @@ namespace JmmJ.ToDo.Api.Controller
 
 
 		[HttpGet("tasks")]
-		public async Task<JsonResult> GetTasks(int start = 1, int count = 10, string sortField = "CreatedAt")
+		public async Task<JsonResult> GetTasks(int start = 1, int count = 10, string sortField = "CreatedAt", OrderBy sortType = OrderBy.Desc)
 		{
-			var results = await _taskService.GetTasksAsync(start, count, sortField);
+			var results = await _taskService.GetTasksAsync(start, count, sortField, sortType);
 			return new JsonResult(results);
 		}
 
-		[HttpGet("tasks/{title}")]
-		public async Task<JsonResult> GetTasksByTitle(string title, int start = 1, int count = 10, string sortField = "CreatedAt")
+		[HttpGet("tasks/title/{title}")]
+		public async Task<JsonResult> GetTasksByTitle(string title, int start = 1, int count = 10, string sortField = "CreatedAt", OrderBy sortType = OrderBy.Desc)
 		{
-			var results = await _taskService.GetTasksByTitleAsync(title, start, count, sortField);
+			var results = await _taskService.GetTasksByTitleAsync(title, start, count, sortField, sortType);
 			return new JsonResult(results);
 		}
-		[HttpGet("tasks/{description}")]
-		public async Task<JsonResult> GetTasksByDescription(string description, int start = 1, int count = 10, string sortField = "CreatedAt")
+		[HttpGet("tasks/description/{description}")]
+		public async Task<JsonResult> GetTasksByDescription(string description, int start = 1, int count = 10, string sortField = "CreatedAt", OrderBy sortType = OrderBy.Desc)
 		{
-			var results = await _taskService.GetTasksByDescriptionAsync(description, start, count, sortField);
+			var results = await _taskService.GetTasksByDescriptionAsync(description, start, count, sortField, sortType);
 			return new JsonResult(results);
 		}
+
+		[HttpGet("tasks/filter/{filter}")]
+		public async Task<JsonResult> GetTasksByFilter(string filter, int start = 1, int count = 10, string sortField = "CreatedAt", OrderBy sortType = OrderBy.Desc)
+		{
+			var results = await _taskService.GetTasksByFilter(filter, start, count, sortField, sortType);
+			return new JsonResult(results);
+		}
+
 
 		[HttpPost]
 		public async Task<JsonResult> CreateTask([FromBody]NewTaskDto taskDto)

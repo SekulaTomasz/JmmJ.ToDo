@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using JmmJ.ToDo.Core.Domain;
+using JmmJ.ToDo.Core.Enum;
 using JmmJ.ToDo.Core.IRepository;
 using JmmJ.ToDo.Service.Dto;
 using JmmJ.ToDo.Service.Service.IService;
@@ -27,19 +28,24 @@ namespace JmmJ.ToDo.Service.Service
 			return await _taskRepository.Delete(id);
 		}
 
-		public async Task<PagedResult<Core.Domain.Task>> GetTasksAsync(int start, int count, string sortField)
+		public async Task<PagedResult<Core.Domain.Task>> GetTasksAsync(int start, int count, string sortField, OrderBy sortType)
 		{
-			return await _taskRepository.GetTasks(start, count, sortField); ;
+			return await _taskRepository.GetTasks(start, count, sortField, sortType); 
 		}
 
-		public async Task<PagedResult<Core.Domain.Task>> GetTasksByDescriptionAsync(string description, int start, int count, string sortField)
+		public async Task<PagedResult<Core.Domain.Task>> GetTasksByDescriptionAsync(string description, int start, int count, string sortField, OrderBy sortType)
 		{
-			return await _taskRepository.GetTasksByDescription(description, start, count, sortField);
+			return await _taskRepository.GetTasksByDescription(description, start, count, sortField, sortType);
 		}
 
-		public async Task<PagedResult<Core.Domain.Task>> GetTasksByTitleAsync(string title, int start, int count, string sortField)
+		public async Task<PagedResult<Core.Domain.Task>> GetTasksByFilter(string param, int start, int count, string sortField, OrderBy sortType)
 		{
-			return await _taskRepository.GetTasksByTitleAsync(title, start, count, sortField);
+			return await _taskRepository.GetTasksByFilter(param, start, count, sortField, sortType);
+		}
+
+		public async Task<PagedResult<Core.Domain.Task>> GetTasksByTitleAsync(string title, int start, int count, string sortField, OrderBy sortType)
+		{
+			return await _taskRepository.GetTasksByTitleAsync(title, start, count, sortField, sortType);
 		}
 
 		public async Task<Result> PostAsync(NewTaskDto taskDto)

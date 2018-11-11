@@ -9,6 +9,7 @@ using System.Net;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using JmmJ.ToDo.Core.Domain;
+using JmmJ.ToDo.Core.Enum;
 using Task = System.Threading.Tasks.Task;
 
 namespace JmmJ.ToDo.Service.Repository
@@ -38,6 +39,8 @@ namespace JmmJ.ToDo.Service.Repository
 				{
 					return result;
 				}
+				result.ResultMessage = "Object removed";
+				result.StatusCode = HttpStatusCode.OK;
 				_context.Tasks.Remove(task);
 				await _context.SaveChangesAsync();
 			}
@@ -54,21 +57,27 @@ namespace JmmJ.ToDo.Service.Repository
 			return await _context.Tasks.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
 		}
 
-		public async Task<PagedResult<Core.Domain.Task>> GetTasks(int start, int count, string sortField)
+		public async Task<PagedResult<Core.Domain.Task>> GetTasks(int start, int count, string sortField, OrderBy sortType)
 		{
-			return await PagedResult<Core.Domain.Task>.CreateAsync(_context.Tasks.AsQueryable(), start, count, sortField);
+			return await PagedResult<Core.Domain.Task>.CreateAsync(_context.Tasks.AsQueryable(), start, count, sortField, sortType);
 		}
 
-		public async Task<PagedResult<Core.Domain.Task>> GetTasksByDescription(string description, int start, int count, string sortField)
+		public async Task<PagedResult<Core.Domain.Task>> GetTasksByDescription(string description, int start, int count, string sortField, OrderBy sortType)
 		{
 			return await PagedResult<Core.Domain.Task>.CreateAsync(_context.Tasks.Where(x => 
-				x.Description.ToLowerInvariant().Contains(description.ToLowerInvariant())).AsQueryable(), start, count, sortField);
+				x.Description.ToLowerInvariant().Contains(description.ToLowerInvariant())).AsQueryable(), start, count, sortField, sortType);
 		}
 
-		public async Task<PagedResult<Core.Domain.Task>> GetTasksByTitleAsync(string title, int start, int count, string sortField)
+		public async Task<PagedResult<Core.Domain.Task>> GetTasksByFilter(string param, int start, int count, string sortField, OrderBy sortType)
 		{
 			return await PagedResult<Core.Domain.Task>.CreateAsync(_context.Tasks.Where(x =>
-				x.Title.ToLowerInvariant().Contains(title.ToLowerInvariant())).AsQueryable(), start, count, sortField);
+				x.Title.ToLowerInvariant().Contains(param.ToLowerInvariant()) || x.Description.ToLowerInvariant().Contains(param.ToLowerInvariant())).AsQueryable(), start, count, sortField, sortType);
+		}
+
+		public async Task<PagedResult<Core.Domain.Task>> GetTasksByTitleAsync(string title, int start, int count, string sortField, OrderBy sortType)
+		{
+			return await PagedResult<Core.Domain.Task>.CreateAsync(_context.Tasks.Where(x =>
+				x.Title.ToLowerInvariant().Contains(title.ToLowerInvariant())).AsQueryable(), start, count, sortField, sortType);
 		}
 
 		public async Task<Result> Post(Core.Domain.Task task)
