@@ -1,0 +1,17 @@
+﻿@model IList<JmmJ.ToDo.Core.Domain.Task>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+
+<h2>Index</h2>
+
+
+@foreach (var i in Model)
+{
+	<p>@i.Id</p>
+	<p>@i.Title</p>
+	<p>@i.Status</p>
+}

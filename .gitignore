@@ -261,3 +261,4 @@ __pycache__/
 *.pyc
 /JmmJ.ToDo.Api/config.json
 /JmmJ.ToDo.Api/appsettings.json
+/Jmmj.ToDo.Mvc/appsettings.json
