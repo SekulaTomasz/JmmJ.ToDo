@@ -50,6 +50,13 @@ namespace JmmJ.ToDo.Api.Controller
 			return new JsonResult(results);
 		}
 
+		[HttpGet("tasks/status/{status}")]
+		public async Task<JsonResult> GetTasksByStatus(Status status, int start = 1, int count = 10, string sortField = "CreatedAt", OrderBy sortType = OrderBy.Desc)
+		{
+			var results = await _taskService.GetTasksByStatus(status, start, count, sortField, sortType);
+			return new JsonResult(results);
+		}
+
 
 		[HttpPost]
 		public async Task<JsonResult> CreateTask([FromBody]NewTaskDto taskDto)

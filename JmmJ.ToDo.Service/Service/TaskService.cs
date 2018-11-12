@@ -43,6 +43,11 @@ namespace JmmJ.ToDo.Service.Service
 			return await _taskRepository.GetTasksByFilter(param, start, count, sortField, sortType);
 		}
 
+		public async Task<PagedResult<Core.Domain.Task>> GetTasksByStatus(Status status, int start, int count, string sortField, OrderBy sortType)
+		{
+			return await _taskRepository.GetTasksByStatus(status, start, count, sortField, sortType);
+		}
+
 		public async Task<PagedResult<Core.Domain.Task>> GetTasksByTitleAsync(string title, int start, int count, string sortField, OrderBy sortType)
 		{
 			return await _taskRepository.GetTasksByTitleAsync(title, start, count, sortField, sortType);

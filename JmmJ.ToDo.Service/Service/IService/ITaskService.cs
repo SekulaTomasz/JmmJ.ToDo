@@ -14,6 +14,7 @@ namespace JmmJ.ToDo.Service.Service.IService
 		Task<PagedResult<Core.Domain.Task>> GetTasksAsync(int start, int count, string sortField,OrderBy sortType);
 		Task<PagedResult<Core.Domain.Task>> GetTasksByDescriptionAsync(string description, int start, int count, string sortField,OrderBy sortType);
 		Task<PagedResult<Core.Domain.Task>> GetTasksByFilter(string param, int start, int count, string sortField, OrderBy sortType);
+		Task<PagedResult<Core.Domain.Task>> GetTasksByStatus(Status status, int start, int count, string sortField, OrderBy sortType);
 		Task<Result> PutAsync(EditTaskDto taskDto);
 		Task<Result> PostAsync(NewTaskDto taskDto);
 		Task<Result> DeleteAsync(Guid id);

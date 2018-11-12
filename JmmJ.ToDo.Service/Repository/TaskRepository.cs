@@ -74,6 +74,11 @@ namespace JmmJ.ToDo.Service.Repository
 				x.Title.ToLowerInvariant().Contains(param.ToLowerInvariant()) || x.Description.ToLowerInvariant().Contains(param.ToLowerInvariant())).AsQueryable(), start, count, sortField, sortType);
 		}
 
+		public async Task<PagedResult<Core.Domain.Task>> GetTasksByStatus(Status status, int start, int count, string sortField, OrderBy sortType)
+		{
+			return await PagedResult<Core.Domain.Task>.CreateAsync(_context.Tasks.Where(x=>x.Status == status).AsQueryable(), start, count, sortField, sortType);
+		}
+
 		public async Task<PagedResult<Core.Domain.Task>> GetTasksByTitleAsync(string title, int start, int count, string sortField, OrderBy sortType)
 		{
 			return await PagedResult<Core.Domain.Task>.CreateAsync(_context.Tasks.Where(x =>
