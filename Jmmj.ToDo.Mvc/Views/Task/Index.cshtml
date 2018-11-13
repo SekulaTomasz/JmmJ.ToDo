@@ -1,0 +1,78 @@
+﻿@model JmmJ.ToDo.Core.Domain.PagedResult<JmmJ.ToDo.Core.Domain.Task>
+@using  JmmJ.ToDo.Core.Enum;
+@using X.PagedList;
+
+@using X.PagedList.Mvc.Core
+
+@{
+	ViewData["Title"] = "Index";
+}
+
+
+<div class="card">
+	<div class="card-header">
+		<h2>List of task</h2>
+		@if (ViewBag.errors != null)
+		{
+			@foreach (var i in ViewBag.errors)
+			{
+				<div class="alert alert-danger" role="alert">
+					@i
+				</div>
+			}
+		}
+	</div>
+	<div class="card-body">
+
+		<a href="task/create" class="btn btn-primary" role="button" aria-pressed="true">New task</a>
+		@using (Html.BeginForm())
+		{
+			<p>
+				Find by name: @Html.TextBox("filter")
+				<input type="submit" value="Search" />
+			</p>
+		}
+		@*<p><input type="text" class="form-control" style="width:30%;margin:0px;" id="filtrInput" /><a onclick="filterTable()"><span class="glyphicon glyphicon-search"></span></a></p>*@
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th scope="col">Title</th>
+					<th scope="col">Description</th>
+					<th scope="col">End Date</th>
+					<th scope="col">Created At</th>
+					@if (ViewBag.SortOrder == OrderBy.Desc)
+					{
+						<th scope="col">@Html.ActionLink("Priority", "Index", new { currentFilter = "Priority", sortOrder = OrderBy.Asc })</th>
+					}
+					else
+					{
+						<th scope="col">@Html.ActionLink("Priority", "Index", new { currentFilter = "Priority", sortOrder = OrderBy.Desc })</th>
+					}
+						<th scope="col">Status
+						</th>
+				<th scope="col">Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var i in Model.Results)
+			{
+				<tr>
+					<td scope="row">@i.Title</td>
+					<td scope="row">@i.Description</td>
+					<td scope="row">@String.Format("{0:dd-MM-yyyy}", i.ExpectedEndDate)</td>
+					<td scope="row">@String.Format("{0:dd-MM-yyyy}", i.CreatedAt)</td>
+					<td scope="row">@i.Priority</td>
+					<td scope="row">@i.Status</td>
+					<td scope="row">
+						@if (i.Status != Status.Ended)
+						{
+							@Html.ActionLink("Edit", "Edit", "Task", new { id = i.Id.ToString() }, new { @class = "btn btn-primary" });
+						}
+						@Html.ActionLink("Delete", "Delete", "Task", new { id = i.Id.ToString() }, new { @class = "btn btn-danger" })
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+	@Html.PagedListPager((IPagedList)ViewBag.OnePageOfUsers, page => Url.Action("Index", new { page }))
+
