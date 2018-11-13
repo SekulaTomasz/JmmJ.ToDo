@@ -18,5 +18,6 @@ namespace JmmJ.ToDo.Service.Service.IService
 		Task<Result> PutAsync(EditTaskDto taskDto);
 		Task<Result> PostAsync(NewTaskDto taskDto);
 		Task<Result> DeleteAsync(Guid id);
+		Task<EditTaskDto> GetTaskById(Guid id);
 	}
 }

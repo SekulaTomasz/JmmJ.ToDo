@@ -1,17 +1,83 @@
-﻿@model IList<JmmJ.ToDo.Core.Domain.Task>
+﻿@model JmmJ.ToDo.Core.Domain.PagedResult<JmmJ.ToDo.Core.Domain.Task>;
+@using  JmmJ.ToDo.Core.Enum;
 
 @{
-    ViewData["Title"] = "Index";
+	ViewData["Title"] = "Index";
 }
 
 
+<div class="card">
+	<div class="card-header">
+		<h2>List of task</h2>
+		@if (ViewBag.errors != null)
+		{
+			@foreach (var i in ViewBag.errors)
+			{
+				<div class="alert alert-danger" role="alert">
+					@i
+				</div>
+			}
+		}
+	</div>
+	<div class="card-body">
 
-<h2>Index</h2>
+		<a href="task/create" class="btn btn-primary" role="button" aria-pressed="true">New task</a>
+		<br />
+		<br />
+		<p><input type="text" class="form-control" style="width:30%;margin:0px;" id="filtrInput" /><a onclick="filterTable()"><span class="glyphicon glyphicon-search"></span></a></p>
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th scope="col">Title</th>
+					<th scope="col">Description</th>
+					<th scope="col">End Date</th>
+					<th scope="col">Created At</th>
+					<th scope="col"><a href="#" onclick="sortTabelByPriority(this)">Priority</a></th>
+					<th scope="col">Status</th>
+					<th scope="col">Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var i in Model.Results)
+				{
+					<tr>
+						<td scope="row">@i.Title</td>
+						<td scope="row">@i.Description</td>
+						<td scope="row">@String.Format("{0:dd/MM/yyyy}", i.ExpectedEndDate)</td>
+						<td scope="row">@String.Format("{0:dd/MM/yyyy}", i.CreatedAt)</td>
+						<td scope="row">@i.Priority</td>
+						<td scope="row">@i.Status</td>
+						<td scope="row">
+							@if (i.Status != Status.Ended)
+							{
+								@Html.ActionLink("Edit", "Edit", "Task", new { id = i.Id.ToString() }, new { @class = "btn btn-primary" });
+								@*<a href="@Url.Action("Edit",i.Id)" class="btn btn-primary" role="button" aria-pressed="true">Edit</a>*@
+							}
+							@Html.ActionLink("Delete", "Delete", "Task", new { id = i.Id.ToString() }, new { @class = "btn btn-danger" })
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
 
+<script>
 
-@foreach (var i in Model)
-{
-	<p>@i.Id</p>
-	<p>@i.Title</p>
-	<p>@i.Status</p>
-}
+	function sortTabelByPriority(param) {
+		console.log(param.text);
+	}
+
+	function filterTable() {
+		var filtr = $('#filtrInput').val();
+		if (filtr.length == 0) return;
+
+		$.ajax
+			({
+				type: "GET",
+				url: "tasks/filter/" + filtr + "?start=1&count=10&sortField=CreatedAt&sortType=0",
+				contentType: "application/json",
+				success: function (html) {
+					//alert(html);
+				}
+			});
+	}
+</script>

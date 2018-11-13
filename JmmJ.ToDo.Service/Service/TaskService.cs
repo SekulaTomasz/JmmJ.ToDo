@@ -28,6 +28,13 @@ namespace JmmJ.ToDo.Service.Service
 			return await _taskRepository.Delete(id);
 		}
 
+		public async Task<EditTaskDto> GetTaskById(Guid id)
+		{
+			var result = await _taskRepository.GetTaskById(id);
+			var resultDto = _mapper.Map<Core.Domain.Task, EditTaskDto>(result);
+			return resultDto;
+		}
+
 		public async Task<PagedResult<Core.Domain.Task>> GetTasksAsync(int start, int count, string sortField, OrderBy sortType)
 		{
 			return await _taskRepository.GetTasks(start, count, sortField, sortType); 

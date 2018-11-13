@@ -38,7 +38,6 @@ namespace Jmmj.ToDo.Mvc
 				options.MinimumSameSitePolicy = SameSiteMode.None;
 			});
 
-
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 			services.AddDbContext<DatabaseContext>(opt =>
 				opt.UseSqlServer(Configuration.GetConnectionString("DatabaseConnection")));
@@ -72,8 +71,12 @@ namespace Jmmj.ToDo.Mvc
 			{
 				routes.MapRoute(
 					name: "default",
-					template: "{controller=Home}/{action=Index}/{id?}");
+					template: "{controller=Task}/{action=Index}/{id?}");
 			});
+
+			var dataInitializer = app.ApplicationServices.GetService<IDatabaseInitializer>();
+			dataInitializer.SeedAsync();
+
 			appLifetime.ApplicationStopped.Register(() => ApplicationContainer.Dispose());
 		}
 	}
