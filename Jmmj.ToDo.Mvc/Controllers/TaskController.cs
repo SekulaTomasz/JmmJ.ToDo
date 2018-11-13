@@ -20,10 +20,14 @@ namespace Jmmj.ToDo.Mvc.Controllers
 			_taskService = taskService;
 		}
 
-		[HttpGet]
-		public async Task<IActionResult> Index()
+		
+		public async Task<IActionResult> Index(string filter)
 		{
 			var results = await _taskService.GetTasksAsync(1, 10, "CreatedAt", OrderBy.Desc);
+			if (!string.IsNullOrEmpty(filter)) {
+				results = await _taskService.GetTasksByFilter(filter, 1, 10, "CreatedAt", OrderBy.Desc);
+			}
+			
 			return View(results);
 		}
 
@@ -93,18 +97,18 @@ namespace Jmmj.ToDo.Mvc.Controllers
 		}
 
 
-		[HttpGet("tasks/filter/{filter}")]
-		public async Task<JsonResult> Index(string filter, int start = 1, int count = 10, string sortField = "CreatedAt", OrderBy sortType = OrderBy.Desc)
-		{
-			var results = await _taskService.GetTasksByFilter(filter, start, count, sortField, sortType);
-			return new JsonResult(results);
-		}
+		//[HttpGet("tasks/filter/{filter}")]
+		//public async Task<JsonResult> Index(string filter, int start = 1, int count = 10, string sortField = "CreatedAt", OrderBy sortType = OrderBy.Desc)
+		//{
+		//	var results = await _taskService.GetTasksByFilter(filter, start, count, sortField, sortType);
+		//	return new JsonResult(results);
+		//}
 
-		[HttpGet("tasks/status/{status}")]
-		public async Task<JsonResult> Index(Status status, int start = 1, int count = 10, string sortField = "CreatedAt", OrderBy sortType = OrderBy.Desc)
-		{
-			var results = await _taskService.GetTasksByStatus(status, start, count, sortField, sortType);
-			return new JsonResult(results);
-		}
+		//[HttpGet("tasks/status/{status}")]
+		//public async Task<JsonResult> Index(Status status, int start = 1, int count = 10, string sortField = "CreatedAt", OrderBy sortType = OrderBy.Desc)
+		//{
+		//	var results = await _taskService.GetTasksByStatus(status, start, count, sortField, sortType);
+		//	return new JsonResult(results);
+		//}
 	}
 }

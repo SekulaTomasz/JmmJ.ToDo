@@ -22,9 +22,14 @@
 	<div class="card-body">
 
 		<a href="task/create" class="btn btn-primary" role="button" aria-pressed="true">New task</a>
-		<br />
-		<br />
-		<p><input type="text" class="form-control" style="width:30%;margin:0px;" id="filtrInput" /><a onclick="filterTable()"><span class="glyphicon glyphicon-search"></span></a></p>
+		@using (Html.BeginForm())
+		{
+			<p>
+				Find by name: @Html.TextBox("filter")
+				<input type="submit" value="Search" />
+			</p>
+		}
+		@*<p><input type="text" class="form-control" style="width:30%;margin:0px;" id="filtrInput" /><a onclick="filterTable()"><span class="glyphicon glyphicon-search"></span></a></p>*@
 		<table class="table table-hover">
 			<thead>
 				<tr>
@@ -60,24 +65,24 @@
 			</tbody>
 		</table>
 
-<script>
+		<script>
 
-	function sortTabelByPriority(param) {
-		console.log(param.text);
-	}
+			function sortTabelByPriority(param) {
+				console.log(param.text);
+			}
 
-	function filterTable() {
-		var filtr = $('#filtrInput').val();
-		if (filtr.length == 0) return;
+			function filterTable() {
+				var filtr = $('#filtrInput').val();
+				if (filtr.length == 0) return;
 
-		$.ajax
-			({
-				type: "GET",
-				url: "tasks/filter/" + filtr + "?start=1&count=10&sortField=CreatedAt&sortType=0",
-				contentType: "application/json",
-				success: function (html) {
-					//alert(html);
-				}
-			});
-	}
-</script>
+				$.ajax
+					({
+						type: "GET",
+						url: "tasks/filter/" + filtr + "?start=1&count=10&sortField=CreatedAt&sortType=0",
+						contentType: "application/json",
+						success: function (html) {
+							//alert(html);
+						}
+					});
+			}
+		</script>
