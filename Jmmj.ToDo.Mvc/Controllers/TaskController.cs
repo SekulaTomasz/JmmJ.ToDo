@@ -8,6 +8,7 @@ using JmmJ.ToDo.Core.Enum;
 using JmmJ.ToDo.Service.Dto;
 using JmmJ.ToDo.Service.Service.IService;
 using Microsoft.AspNetCore.Mvc;
+using X.PagedList;
 
 namespace Jmmj.ToDo.Mvc.Controllers
 {
@@ -21,13 +22,16 @@ namespace Jmmj.ToDo.Mvc.Controllers
 		}
 
 		
-		public async Task<IActionResult> Index(string filter)
+		public async Task<IActionResult> Index(string filter, OrderBy sortOrder = OrderBy.Desc, string currentFilter = "CreatedAt", int page = 1)
 		{
-			var results = await _taskService.GetTasksAsync(1, 10, "CreatedAt", OrderBy.Desc);
+			ViewBag.SortOrder = sortOrder;
+			var results = await _taskService.GetTasksAsync(page, 10, currentFilter, sortOrder);
 			if (!string.IsNullOrEmpty(filter)) {
-				results = await _taskService.GetTasksByFilter(filter, 1, 10, "CreatedAt", OrderBy.Desc);
+				results = await _taskService.GetTasksByFilter(filter, page, 10, currentFilter, sortOrder);
 			}
-			
+
+			var usersAsIPagedList = new StaticPagedList<JmmJ.ToDo.Core.Domain.Task>(results.Results, results.CurrentPage, results.PageSize, results.RowCount);
+			ViewBag.OnePageOfUsers = usersAsIPagedList;
 			return View(results);
 		}
 
@@ -93,22 +97,7 @@ namespace Jmmj.ToDo.Mvc.Controllers
 			}
 			ViewBag.Errors = new List<string>();
 			ViewBag.Errors = results.Exception;
-			return View();
+			return RedirectToAction("Index");
 		}
-
-
-		//[HttpGet("tasks/filter/{filter}")]
-		//public async Task<JsonResult> Index(string filter, int start = 1, int count = 10, string sortField = "CreatedAt", OrderBy sortType = OrderBy.Desc)
-		//{
-		//	var results = await _taskService.GetTasksByFilter(filter, start, count, sortField, sortType);
-		//	return new JsonResult(results);
-		//}
-
-		//[HttpGet("tasks/status/{status}")]
-		//public async Task<JsonResult> Index(Status status, int start = 1, int count = 10, string sortField = "CreatedAt", OrderBy sortType = OrderBy.Desc)
-		//{
-		//	var results = await _taskService.GetTasksByStatus(status, start, count, sortField, sortType);
-		//	return new JsonResult(results);
-		//}
 	}
 }

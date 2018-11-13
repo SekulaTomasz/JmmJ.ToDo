@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using JmmJ.ToDo.Core.IRepository;
 using JmmJ.ToDo.Service.Database;
 using System.Linq;
 using System.Net;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
 using JmmJ.ToDo.Core.Domain;
 using JmmJ.ToDo.Core.Enum;
-using Task = System.Threading.Tasks.Task;
 
 namespace JmmJ.ToDo.Service.Repository
 {
